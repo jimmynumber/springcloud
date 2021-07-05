@@ -1,0 +1,100 @@
+*******************nacos************************
+https://github.com/alibaba/nacos/tags
+D:\jimmy_down\nacos\bin> startup.cmd -m standalone
+
+http://localhost:8848/nacos
+nacos/nacos
+
+D:\jimmy_down\nacos\conf\application.properties
+
+spring.datasource.platform=mysql
+
+db.num=1
+db.url.0=jdbc:mysql://10.0.26.128:3306/nacos_config?characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC
+db.user.0=nacos_config
+db.password.0=#Zxb12345
+
+D:\jimmy_down\nacos\conf\nacos-mysql.sql
+
+********************Sentinel***********************
+https://github.com/alibaba/Sentinel/releases/tag/1.7.0
+D:\jimmy_down/sentinel-dashboard-1.7.0.jar
+java -jar sentinel-dashboard-1.7.0.jar
+
+http://localhost:8080 sentinel/sentinel
+
+
+*****************sentinel 持久化规则到 nacos mysql 中*****************************
+http://localhost:8848/nacos/#/configurationManagement?dataId=&group=&appName=&namespace=&pageSize=&pageNo=
+配置列表--》新建+
+Data ID: ${spring.application.name}
+
+// spring.cloud.sentinel.datasource
+      # 将sentinel 规则持久化到nacos mysql 数据库中
+      datasource:
+        dsl:
+          nacos:
+            server-addr: localhost:8848
+            dataid: ${spring.application.name}
+            groupid: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow
+
+
+[
+  {
+    "resource":"/byURL",
+    "limitApp":"default",
+    "grade":1,
+    "count":3,
+    "strategy":0,
+    "controlBehavior":0,
+    "clusterMode":false
+  }
+]
+-----映射关系
+"resource":资源名称,
+"limitApp":来源应用,
+"grade":阈值类型：0：线程数，1：QPS,
+"count":单机阈值,
+"strategy":流控模式，0：直接，1：关联，2:链路,
+"controlBehavior":流控效果，0：快速失败，1：warm UP，2：排队等待,
+"clusterMode":是否集群，true：是，false：否,
+
+***************************seata******************************
+https://seata.io/en-us/
+https://github.com/seata/seata/releases/tag/v0.9.0
+
+TC 事务协调者
+  维护全局和分支事务的状态，驱动全局事务的提交或回滚
+TM 事务管理器
+  定义全局事务的范围：开始全局事务，提交或回滚
+RM 资源管理器
+   管理分支事务处理的资源，与TC交谈以注册分支事务和报告分支事务的状态，并驱动分支事务的提交或回滚
+
+
+create table t_order(
+ id bigint(11) auto_increment primary key,
+ user_id bigint(11) ,
+ product_id bigint(11),
+ count int(11),
+ money decimal(11,0),
+ status int(11)
+)engine= innodb auto_increment=7 default charset=utf8
+
+create table t_storage(
+ id bigint(11) auto_increment primary key,
+ product_id bigint(11),
+ total int(11) comment '总库存' ,
+ used int(11) comment '已用库存',
+ residue int(11) comment '剩余库存'
+)engine= innodb auto_increment=7 default charset=utf8
+
+
+create table t_accout(
+ id bigint(11) auto_increment primary key,
+ user_id bigint(11) comment '用户id' ,
+ total decimal(11) comment '总额度' ,
+ used decimal(11) comment '已用额度',
+ residue decimal(11) comment '余下可用额度'
+)engine= innodb auto_increment=7 default charset=utf8

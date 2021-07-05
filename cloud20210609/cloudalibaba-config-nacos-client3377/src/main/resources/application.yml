@@ -1,0 +1,7 @@
+# ${spring.application.name}-${spring.profile.active}.${spring.cloud.nacos.config.file-extension}
+
+spring:
+  profiles:
+    active: dev # dev|test|prod
+    #active: info
+

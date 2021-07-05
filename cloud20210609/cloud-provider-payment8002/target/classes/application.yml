@@ -1,0 +1,36 @@
+server:
+  port: 8002
+
+spring:
+  application:
+    name: cloud-payment-service
+  datasource:
+    druid:
+      url: jdbc:mysql://10.0.26.128:3306/icenter?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false
+      username: icenter
+      password: icenter#DEV0903
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#      #org.gjt.mm.mysql.Driver
+#    url: jdbc:mysql://10.0.26.128:3306/icenter?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false
+#    username: icenter
+#    password: icenter#TEST0309
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.atguigu.springcloud.entities
+
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka # 单机版
+      #defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka # 集群版
+  instance:
+    instance-id: payment8002
+    prefer-ip-address: true #表示显示访问ip地址

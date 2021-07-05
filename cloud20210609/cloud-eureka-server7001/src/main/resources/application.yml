@@ -1,0 +1,17 @@
+server:
+  port: 7001
+
+eureka:
+  instance:
+    #hostname: localhost #euraka 服务端的实例名称 单机版
+    hostname: eureka7001.com #euraka 服务端的实例名称 集群
+  client:
+    register-with-eureka: false # false 表示不注册自己 true 表示注册自己
+    fetch-registry: false  #false 表示自己就是注册端
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/  #单机版
+#      defaultZone: http://eureka7002.com:7002/eureka/  #集群
+  server:
+    # 关闭保护机制，没钱立马滚蛋，去除冷静缓冲期
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 2000 #2秒后 立马清除

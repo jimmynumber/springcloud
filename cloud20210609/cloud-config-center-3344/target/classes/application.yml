@@ -1,0 +1,50 @@
+server:
+  port: 3344
+
+spring:
+  application:
+    name: cloud-config-center
+  cloud:
+    config:
+      server:
+        git:
+           skipSslValidation: true
+           #uri: git@github.com:jimmynumber/springcloud-config.git  #github上面的git地址
+           uri: https://github.com/jimmynumber/springcloud-config.git  #github上面的git地址
+#           username: 1597480015@qq.com
+#           password:
+           search-paths:
+             - springcloud-config
+           #default-label: master
+           timeout: 400
+      label: master  #读取分支
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+# rabbitmq 相关配置，暴露bus刷新配置的端点
+# curl -X POST "http://localhost:3344/actuator/bus-refresh"
+# curl -X POST "http://localhost:3344/actuator/bus-refresh/congig-client:3355"  #只通知某个人
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "bus-refresh"
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka
+
+
+
+
+#  http://localhost:3344/master/config-dev.yml
+#  http://config-3344.com:3344/master/config-dev.yml
+
+logging:
+  level:
+    com.netflix.discovery: 'OFF'
+    org.springframework.cloud: 'DEBUG'
+
